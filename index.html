@@ -1,0 +1,2694 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>White Alliance Of Musicians</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --white: #ffffff;
+            --off-white: #f5f5f5;
+            --light-gray: #e0e0e0;
+            --mid-gray: #888888;
+            --dark-gray: #1a1a1a;
+            --black: #000000;
+            --near-black: #0d0d0d;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--near-black);
+            color: var(--white);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            cursor: default;
+        }
+
+        
+        .cursor {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--white);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 10000;
+            transition: transform 0.15s ease, opacity 0.15s ease, width 0.3s ease, height 0.3s ease, border-color 0.3s ease;
+            mix-blend-mode: difference;
+        }
+
+        .cursor.hover {
+            width: 60px;
+            height: 60px;
+            border-color: var(--white);
+        }
+
+        .cursor-dot {
+            width: 4px;
+            height: 4px;
+            background: var(--white);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 10001;
+            mix-blend-mode: difference;
+            transition: transform 0.1s ease, opacity 0.3s ease;
+            opacity: 1;
+        }
+
+        .cursor-dot.hidden {
+            opacity: 0;
+            transform: scale(0);
+        }
+
+        .cursor-text {
+            position: fixed;
+            pointer-events: none;
+            z-index: 10002;
+            font-size: 0.6rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--white);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            mix-blend-mode: difference;
+        }
+
+        .cursor-text.show {
+            opacity: 1;
+        }
+
+        
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--black);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .preloader-logo {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .preloader-text {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.2rem;
+            letter-spacing: 12px;
+            text-transform: uppercase;
+            color: var(--white);
+            opacity: 0;
+            animation: preloaderFade 1.5s ease forwards;
+        }
+
+        .preloader-text span {
+            display: inline-block;
+            animation: letterWave 0.5s ease forwards;
+            opacity: 0;
+        }
+
+        .preloader-line {
+            width: 0;
+            height: 1px;
+            background: var(--white);
+            margin-top: 30px;
+            animation: preloaderLine 2s ease 0.5s forwards;
+        }
+
+        .preloader-counter {
+            position: absolute;
+            bottom: 60px;
+            right: 60px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 4rem;
+            font-weight: 700;
+            color: rgba(255,255,255,0.1);
+        }
+
+        .preloader.hide {
+            animation: preloaderHide 1.2s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+        }
+
+        @keyframes letterWave {
+            0% { opacity: 0; transform: translateY(20px) rotateX(90deg); }
+            100% { opacity: 1; transform: translateY(0) rotateX(0); }
+        }
+
+        @keyframes preloaderFade {
+            to { opacity: 1; }
+        }
+
+        @keyframes preloaderLine {
+            to { width: 200px; }
+        }
+
+        @keyframes preloaderHide {
+            0% { clip-path: circle(150% at 50% 50%); }
+            100% { clip-path: circle(0% at 50% 50%); }
+        }
+
+        
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 30px 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            mix-blend-mode: difference;
+        }
+
+        .nav-logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--white);
+            position: relative;
+        }
+
+        .nav-logo::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: var(--white);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .nav-logo:hover::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+        }
+
+        .nav-links li {
+            overflow: hidden;
+        }
+
+        .nav-links a {
+            color: var(--white);
+            text-decoration: none;
+            font-size: 0.75rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-weight: 300;
+            position: relative;
+            display: inline-block;
+            transition: transform 0.4s ease;
+        }
+
+        .nav-links a::before {
+            content: attr(data-text);
+            position: absolute;
+            top: 100%;
+            left: 0;
+            transform: rotateX(-90deg);
+            transform-origin: top;
+            transition: transform 0.4s ease;
+        }
+
+        .nav-links a:hover {
+            transform: translateY(-100%) rotateX(90deg);
+        }
+
+        .nav-links a:hover::before {
+            transform: rotateX(0);
+        }
+
+        
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-bg-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 80px 80px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(80px, 80px); }
+        }
+
+        
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.15;
+            animation: orbFloat 20s ease-in-out infinite;
+        }
+
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: var(--white);
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .orb-2 {
+            width: 300px;
+            height: 300px;
+            background: var(--white);
+            bottom: 20%;
+            right: 15%;
+            animation-delay: -5s;
+        }
+
+        .orb-3 {
+            width: 200px;
+            height: 200px;
+            background: var(--white);
+            top: 50%;
+            right: 30%;
+            animation-delay: -10s;
+        }
+
+        @keyframes orbFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(50px, -50px) scale(1.1); }
+            50% { transform: translate(-30px, 30px) scale(0.9); }
+            75% { transform: translate(-50px, -30px) scale(1.05); }
+        }
+
+        .hero-content {
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-subtitle {
+            font-size: 0.7rem;
+            letter-spacing: 10px;
+            text-transform: uppercase;
+            color: var(--mid-gray);
+            margin-bottom: 40px;
+            font-weight: 300;
+            opacity: 0;
+            animation: fadeUp 1s ease 2.8s forwards;
+        }
+
+        .hero-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(3rem, 10vw, 9rem);
+            font-weight: 700;
+            line-height: 0.95;
+            letter-spacing: -3px;
+            position: relative;
+        }
+
+        .hero-title .line {
+            display: block;
+            overflow: hidden;
+            perspective: 500px;
+        }
+
+        .hero-title .line span {
+            display: inline-block;
+            transform: translateY(110%) rotateX(-80deg);
+            animation: revealText 1.2s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+            transform-origin: top;
+        }
+
+        .hero-title .line:nth-child(1) span { animation-delay: 2.5s; }
+        .hero-title .line:nth-child(2) span { 
+            animation-delay: 2.7s; 
+            color: transparent; 
+            -webkit-text-stroke: 1px var(--white);
+            background: linear-gradient(90deg, var(--white), transparent);
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: revealText 1.2s cubic-bezier(0.77, 0, 0.175, 1) forwards, textShimmer 3s ease infinite 4s;
+        }
+
+        @keyframes revealText {
+            to { transform: translateY(0) rotateX(0); }
+        }
+
+        @keyframes textShimmer {
+            0%, 100% { background-position: -200% center; }
+            50% { background-position: 200% center; }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero-description {
+            max-width: 400px;
+            margin: 50px auto 0;
+            font-size: 0.85rem;
+            line-height: 1.8;
+            color: var(--mid-gray);
+            font-weight: 300;
+            opacity: 0;
+            animation: fadeUp 1s ease 3.1s forwards;
+        }
+
+        
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            opacity: 0;
+            animation: fadeUp 1s ease 3.5s forwards;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .scroll-indicator:hover {
+            transform: translateX(-50%) scale(1.1);
+        }
+
+        .scroll-indicator span {
+            font-size: 0.6rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--mid-gray);
+            transition: color 0.3s ease;
+        }
+
+        .scroll-indicator:hover span {
+            color: var(--white);
+        }
+
+        .scroll-line {
+            width: 1px;
+            height: 60px;
+            background: linear-gradient(to bottom, var(--white), transparent);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .scroll-line::before {
+            content: '';
+            position: absolute;
+            top: -100%;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--white);
+            animation: scrollDown 2s ease infinite;
+        }
+
+        @keyframes scrollDown {
+            0% { top: -100%; }
+            100% { top: 100%; }
+        }
+
+        
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--white);
+            border-radius: 50%;
+            opacity: 0;
+            animation: particleFloat linear infinite;
+        }
+
+        @keyframes particleFloat {
+            0% { opacity: 0; transform: translateY(100vh) translateX(0) rotate(0deg); }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { opacity: 0; transform: translateY(-10vh) translateX(100px) rotate(720deg); }
+        }
+
+        
+        section {
+            padding: 150px 60px;
+            position: relative;
+        }
+
+        .section-label {
+            font-size: 0.65rem;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            color: var(--mid-gray);
+            margin-bottom: 15px;
+            font-weight: 400;
+        }
+
+        .section-number {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.7rem;
+            color: var(--mid-gray);
+            letter-spacing: 3px;
+            margin-bottom: 60px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .section-number::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(255,255,255,0.1);
+            max-width: 200px;
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 1s ease;
+        }
+
+        .section-number.active::after {
+            transform: scaleX(1);
+        }
+
+        .section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2rem, 5vw, 4.5rem);
+            font-weight: 700;
+            line-height: 1.1;
+            letter-spacing: -2px;
+            margin-bottom: 60px;
+            overflow: hidden;
+        }
+
+        .section-title .word {
+            display: inline-block;
+            overflow: hidden;
+        }
+
+        .section-title .word span {
+            display: inline-block;
+            transform: translateY(100%);
+            transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+        }
+
+        .section-title.active .word span {
+            transform: translateY(0);
+        }
+
+        .section-title .word:nth-child(1) span { transition-delay: 0s; }
+        .section-title .word:nth-child(2) span { transition-delay: 0.1s; }
+        .section-title .word:nth-child(3) span { transition-delay: 0.2s; }
+        .section-title .word:nth-child(4) span { transition-delay: 0.3s; }
+
+        
+        .about {
+            background: var(--near-black);
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 100px;
+            align-items: start;
+        }
+
+        .about-text p {
+            font-size: 1rem;
+            line-height: 2;
+            color: var(--light-gray);
+            font-weight: 300;
+            margin-bottom: 30px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .about-text p.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .about-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-top: 60px;
+        }
+
+        .stat-item {
+            border-top: 1px solid rgba(255,255,255,0.15);
+            padding-top: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: var(--white);
+            transform: translateX(-100%);
+            transition: transform 0.8s ease;
+        }
+
+        .stat-item.active::before {
+            transform: translateX(0);
+        }
+
+        .stat-number {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 8px;
+            background: linear-gradient(90deg, var(--white), var(--mid-gray));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 0.7rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--mid-gray);
+        }
+
+        .about-visual {
+            position: relative;
+            height: 500px;
+        }
+
+        .about-visual-box {
+            position: absolute;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.5s ease;
+        }
+
+        .about-visual-box:nth-child(1) {
+            width: 300px;
+            height: 300px;
+            top: 0;
+            right: 0;
+            animation: boxRotate1 20s linear infinite, boxPulse 4s ease infinite;
+        }
+
+        .about-visual-box:nth-child(2) {
+            width: 200px;
+            height: 200px;
+            top: 50px;
+            right: 50px;
+            animation: boxRotate2 15s linear infinite, boxPulse 4s ease infinite 1s;
+        }
+
+        .about-visual-box:nth-child(3) {
+            width: 100px;
+            height: 100px;
+            top: 100px;
+            right: 100px;
+            animation: boxRotate1 10s linear infinite reverse, boxPulse 4s ease infinite 2s;
+        }
+
+        .about-visual-box:nth-child(4) {
+            width: 50px;
+            height: 50px;
+            top: 125px;
+            right: 125px;
+            animation: boxRotate2 8s linear infinite, boxPulse 4s ease infinite 3s;
+            background: rgba(255,255,255,0.02);
+        }
+
+        .about-visual-text {
+            position: absolute;
+            top: 50%;
+            right: 150px;
+            transform: translateY(-50%);
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 6rem;
+            font-weight: 700;
+            color: rgba(255,255,255,0.03);
+            white-space: nowrap;
+            animation: textPulse 4s ease infinite;
+        }
+
+        @keyframes boxRotate1 {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes boxRotate2 {
+            from { transform: rotate(45deg); }
+            to { transform: rotate(405deg); }
+        }
+
+        @keyframes boxPulse {
+            0%, 100% { opacity: 1; border-color: rgba(255,255,255,0.1); }
+            50% { opacity: 0.5; border-color: rgba(255,255,255,0.3); }
+        }
+
+        @keyframes textPulse {
+            0%, 100% { opacity: 0.03; transform: translateY(-50%) scale(1); }
+            50% { opacity: 0.06; transform: translateY(-50%) scale(1.02); }
+        }
+
+        
+        .manifesto {
+            background: var(--white);
+            color: var(--black);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .manifesto::before {
+            content: 'MANIFESTO';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 20vw;
+            font-weight: 700;
+            color: rgba(0,0,0,0.02);
+            white-space: nowrap;
+            pointer-events: none;
+        }
+
+        .manifesto .section-label,
+        .manifesto .section-number {
+            color: var(--mid-gray);
+        }
+
+        .manifesto .section-number::after {
+            background: rgba(0,0,0,0.15);
+        }
+
+        .manifesto-content {
+            max-width: 800px;
+            position: relative;
+        }
+
+        .manifesto-quote {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(1.5rem, 3.5vw, 3rem);
+            font-weight: 400;
+            line-height: 1.5;
+            letter-spacing: -1px;
+            color: var(--dark-gray);
+            position: relative;
+            padding-left: 40px;
+            border-left: 2px solid var(--black);
+        }
+
+        .manifesto-quote .highlight {
+            position: relative;
+            display: inline;
+        }
+
+        .manifesto-quote .highlight::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 30%;
+            background: rgba(0,0,0,0.1);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.8s ease;
+        }
+
+        .manifesto-quote.active .highlight::after {
+            transform: scaleX(1);
+        }
+
+        .manifesto-blocks {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            margin-top: 100px;
+        }
+
+        .manifesto-block {
+            padding: 40px;
+            border: 1px solid rgba(0,0,0,0.1);
+            transition: all 0.5s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .manifesto-block::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--black);
+            transform: translateY(100%);
+            transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            z-index: 0;
+        }
+
+        .manifesto-block::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--black);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.5s ease;
+        }
+
+        .manifesto-block:hover::before {
+            transform: translateY(0);
+        }
+
+        .manifesto-block:hover::after {
+            transform: scaleX(1);
+        }
+
+        .manifesto-block:hover {
+            color: var(--white);
+            border-color: var(--black);
+            transform: translateY(-10px);
+        }
+
+        .manifesto-block > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .manifesto-block-number {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            opacity: 0.1;
+            margin-bottom: 20px;
+            transition: all 0.5s ease;
+        }
+
+        .manifesto-block:hover .manifesto-block-number {
+            opacity: 0.3;
+            transform: translateX(10px);
+        }
+
+        .manifesto-block h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .manifesto-block p {
+            font-size: 0.85rem;
+            line-height: 1.8;
+            color: var(--mid-gray);
+            transition: color 0.5s ease;
+        }
+
+        .manifesto-block:hover p {
+            color: rgba(255,255,255,0.6);
+        }
+
+        
+        .marquee-section {
+            padding: 60px 0;
+            overflow: hidden;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            position: relative;
+        }
+
+        .marquee-track {
+            display: flex;
+            animation: marquee 30s linear infinite;
+            white-space: nowrap;
+        }
+
+        .marquee-track:hover {
+            animation-play-state: paused;
+        }
+
+        .marquee-track span {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 8rem;
+            font-weight: 700;
+            color: transparent;
+            -webkit-text-stroke: 1px rgba(255,255,255,0.1);
+            padding: 0 60px;
+            flex-shrink: 0;
+            transition: all 0.5s ease;
+        }
+
+        .marquee-track span:hover {
+            -webkit-text-stroke-color: var(--white);
+            text-shadow: 0 0 60px rgba(255,255,255,0.3);
+        }
+
+        @keyframes marquee {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
+        }
+
+        
+        .honor {
+            background: var(--near-black);
+        }
+
+        .honor-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2px;
+        }
+
+        .honor-card {
+            background: rgba(255,255,255,0.02);
+            padding: 50px 40px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .honor-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--white), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.8s ease;
+        }
+
+        .honor-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255,255,255,0.1), transparent 50%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .honor-card:hover::before {
+            transform: translateX(100%);
+        }
+
+        .honor-card:hover::after {
+            opacity: 1;
+        }
+
+        .honor-card:hover {
+            background: rgba(255,255,255,0.05);
+            transform: translateY(-5px);
+        }
+
+        .honor-rank {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 5rem;
+            font-weight: 700;
+            color: rgba(255,255,255,0.04);
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            line-height: 1;
+            transition: all 0.5s ease;
+        }
+
+        .honor-card:hover .honor-rank {
+            color: rgba(255,255,255,0.1);
+            transform: scale(1.1) rotate(-5deg);
+        }
+
+        .honor-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.03));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 25px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border: 1px solid rgba(255,255,255,0.1);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.5s ease;
+        }
+
+        .honor-avatar::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(transparent, rgba(255,255,255,0.3), transparent);
+            animation: avatarRotate 4s linear infinite;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .honor-card:hover .honor-avatar::before {
+            opacity: 1;
+        }
+
+        .honor-card:hover .honor-avatar {
+            border-color: rgba(255,255,255,0.3);
+            box-shadow: 0 0 30px rgba(255,255,255,0.1);
+        }
+
+        @keyframes avatarRotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .honor-name {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .honor-role {
+            font-size: 0.7rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--mid-gray);
+            margin-bottom: 20px;
+        }
+
+        .honor-description {
+            font-size: 0.85rem;
+            line-height: 1.8;
+            color: rgba(255,255,255,0.4);
+            font-weight: 300;
+        }
+
+        .honor-badge {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 6px 16px;
+            border: 1px solid rgba(255,255,255,0.15);
+            font-size: 0.65rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--mid-gray);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .honor-badge::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--white);
+            transition: left 0.4s ease;
+            z-index: 0;
+        }
+
+        .honor-card:hover .honor-badge::before {
+            left: 0;
+        }
+
+        .honor-card:hover .honor-badge {
+            color: var(--black);
+            border-color: var(--white);
+        }
+
+        .honor-badge span {
+            position: relative;
+            z-index: 1;
+        }
+
+        
+        .timeline {
+            background: var(--black);
+            overflow: hidden;
+        }
+
+        .timeline::before {
+            content: 'HISTORY';
+            position: absolute;
+            top: 50%;
+            right: -10%;
+            transform: translateY(-50%) rotate(90deg);
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 15vw;
+            font-weight: 700;
+            color: rgba(255,255,255,0.02);
+            white-space: nowrap;
+            pointer-events: none;
+        }
+
+        .timeline-container {
+            position: relative;
+            max-width: 1000px;
+        }
+
+        .timeline-line {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 1px;
+            height: 100%;
+            background: rgba(255,255,255,0.1);
+            overflow: hidden;
+        }
+
+        .timeline-line::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 0;
+            background: linear-gradient(to bottom, var(--white), rgba(255,255,255,0.3));
+            transition: height 2s ease;
+        }
+
+        .timeline-container.active .timeline-line::before {
+            height: 100%;
+        }
+
+        .timeline-item {
+            padding-left: 60px;
+            padding-bottom: 80px;
+            position: relative;
+            opacity: 0;
+            transform: translateX(-30px);
+            transition: all 0.8s ease;
+        }
+
+        .timeline-item.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .timeline-item:last-child {
+            padding-bottom: 0;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: -5px;
+            top: 5px;
+            width: 11px;
+            height: 11px;
+            border: 2px solid var(--white);
+            border-radius: 50%;
+            background: var(--black);
+            transition: all 0.4s ease;
+        }
+
+        .timeline-dot::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 30px;
+            height: 30px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 50%;
+            opacity: 0;
+            transition: all 0.4s ease;
+        }
+
+        .timeline-item:hover .timeline-dot {
+            background: var(--white);
+            transform: scale(1.5);
+            box-shadow: 0 0 20px rgba(255,255,255,0.5);
+        }
+
+        .timeline-item:hover .timeline-dot::before {
+            opacity: 1;
+            width: 50px;
+            height: 50px;
+        }
+
+        .timeline-date {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.7rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--mid-gray);
+            margin-bottom: 15px;
+        }
+
+        .timeline-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-item:hover .timeline-title {
+            transform: translateX(10px);
+        }
+
+        .timeline-text {
+            font-size: 0.9rem;
+            line-height: 1.9;
+            color: rgba(255,255,255,0.5);
+            max-width: 600px;
+        }
+
+        
+        .projects {
+            background: var(--near-black);
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 3px;
+        }
+
+        .project-card {
+            aspect-ratio: 16/10;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.05);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 40px;
+            transition: all 0.6s ease;
+            cursor: pointer;
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.8) 100%);
+            opacity: 0;
+            transition: opacity 0.6s ease;
+        }
+
+        .project-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.03) 50%, transparent 55%),
+                linear-gradient(-45deg, transparent 45%, rgba(255,255,255,0.03) 50%, transparent 55%);
+            background-size: 300% 300%;
+            animation: shimmerBg 8s ease infinite;
+            pointer-events: none;
+        }
+
+        @keyframes shimmerBg {
+            0%, 100% { background-position: 0% 0%; }
+            50% { background-position: 100% 100%; }
+        }
+
+        .project-card:hover::before {
+            opacity: 1;
+        }
+
+        .project-card:hover {
+            background: rgba(255,255,255,0.05);
+            transform: scale(1.02);
+            z-index: 2;
+        }
+
+        .project-number {
+            position: absolute;
+            top: 30px;
+            left: 40px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.7rem;
+            letter-spacing: 3px;
+            color: var(--mid-gray);
+            transition: all 0.3s ease;
+        }
+
+        .project-card:hover .project-number {
+            color: var(--white);
+        }
+
+        .project-status {
+            position: absolute;
+            top: 30px;
+            right: 40px;
+            font-size: 0.65rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 4px 12px;
+            border: 1px solid rgba(255,255,255,0.2);
+            color: var(--mid-gray);
+            transition: all 0.3s ease;
+        }
+
+        .project-card:hover .project-status {
+            border-color: var(--white);
+            color: var(--white);
+            box-shadow: 0 0 20px rgba(255,255,255,0.2);
+        }
+
+        .project-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .project-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            transform: translateY(20px);
+            transition: transform 0.5s ease;
+        }
+
+        .project-card:hover .project-title {
+            transform: translateY(0);
+        }
+
+        .project-desc {
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.5);
+            line-height: 1.7;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease 0.1s;
+        }
+
+        .project-card:hover .project-desc {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .project-arrow {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 40px;
+            height: 40px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform: scale(0.5) rotate(-45deg);
+            transition: all 0.5s ease;
+        }
+
+        .project-arrow::before {
+            content: '';
+            width: 10px;
+            height: 10px;
+            border-top: 1px solid var(--white);
+            border-right: 1px solid var(--white);
+            transform: rotate(45deg) translate(-2px, 2px);
+        }
+
+        .project-card:hover .project-arrow {
+            opacity: 1;
+            transform: scale(1) rotate(0deg);
+        }
+
+        
+        .vision {
+            background: var(--white);
+            color: var(--black);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .vision::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 80%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0,0,0,0.02) 0%, transparent 60%);
+            animation: visionOrb 20s ease infinite;
+        }
+
+        @keyframes visionOrb {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(-10%, 10%) scale(1.2); }
+        }
+
+        .vision .section-number {
+            color: var(--mid-gray);
+        }
+
+        .vision .section-number::after {
+            background: rgba(0,0,0,0.1);
+        }
+
+        .vision-content {
+            max-width: 800px;
+        }
+
+        .vision-text h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(1.5rem, 3vw, 2.5rem);
+            font-weight: 600;
+            line-height: 1.4;
+            margin-bottom: 30px;
+            color: var(--dark-gray);
+        }
+
+        .vision-text p {
+            font-size: 1rem;
+            line-height: 2;
+            color: var(--mid-gray);
+            margin-bottom: 20px;
+        }
+
+        
+        .quotes {
+            background: var(--near-black);
+            padding: 200px 60px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quotes::before {
+            content: '"';
+            position: absolute;
+            top: 50%;
+            left: 10%;
+            transform: translateY(-50%);
+            font-size: 50vw;
+            font-family: Georgia, serif;
+            color: rgba(255,255,255,0.01);
+            line-height: 1;
+        }
+
+        .quotes-container {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+        }
+
+        .quote-text {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(1.8rem, 4vw, 3.5rem);
+            font-weight: 400;
+            line-height: 1.5;
+            letter-spacing: -1px;
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        .quote-text .word {
+            display: inline-block;
+            overflow: hidden;
+        }
+
+        .quote-text .word span {
+            display: inline-block;
+            transform: translateY(100%);
+            transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+        }
+
+        .quote-text.active .word span {
+            transform: translateY(0);
+        }
+
+        .quote-author {
+            font-size: 0.75rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--mid-gray);
+            position: relative;
+            display: inline-block;
+        }
+
+        .quote-author::before,
+        .quote-author::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 30px;
+            height: 1px;
+            background: var(--mid-gray);
+        }
+
+        .quote-author::before { right: 100%; margin-right: 20px; }
+        .quote-author::after { left: 100%; margin-left: 20px; }
+
+        
+        .large-text-section {
+            padding: 150px 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .large-text {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(4rem, 12vw, 12rem);
+            font-weight: 700;
+            text-transform: uppercase;
+            position: relative;
+            color: var(--white);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .large-text:hover {
+            text-shadow: 
+                0 0 10px rgba(255,255,255,0.5),
+                0 0 20px rgba(255,255,255,0.3),
+                0 0 40px rgba(255,255,255,0.2);
+        }
+
+        .large-text span {
+            display: inline-block;
+            transition: transform 0.3s ease;
+        }
+
+        .large-text span:hover {
+            transform: translateY(-20px) scale(1.1);
+        }
+
+        
+        .diagonal-divider {
+            height: 150px;
+            background: var(--near-black);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .diagonal-divider::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -10%;
+            width: 120%;
+            height: 100%;
+            background: var(--white);
+            transform: skewY(-2deg);
+            transform-origin: top left;
+        }
+
+        .diagonal-divider-reverse {
+            height: 150px;
+            background: var(--white);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .diagonal-divider-reverse::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -10%;
+            width: 120%;
+            height: 100%;
+            background: var(--near-black);
+            transform: skewY(2deg);
+            transform-origin: top right;
+        }
+
+        
+        .join {
+            background: var(--black);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .join::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(255,255,255,0.03) 0%, transparent 60%);
+            animation: joinPulse 4s ease infinite;
+        }
+
+        @keyframes joinPulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.5; }
+        }
+
+        .join-content {
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .join-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2rem, 5vw, 4rem);
+            font-weight: 700;
+            margin-bottom: 30px;
+        }
+
+        .join-text {
+            font-size: 1rem;
+            line-height: 2;
+            color: var(--mid-gray);
+            margin-bottom: 50px;
+        }
+
+        .join-button {
+            display: inline-block;
+            padding: 20px 60px;
+            border: 1px solid var(--white);
+            color: var(--white);
+            text-decoration: none;
+            font-size: 0.75rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.5s ease;
+        }
+
+        .join-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--white);
+            transform: translateX(-101%);
+            transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .join-button:hover::before {
+            transform: translateX(0);
+        }
+
+        .join-button:hover {
+            color: var(--black);
+            box-shadow: 0 0 40px rgba(255,255,255,0.3);
+        }
+
+        .join-button span {
+            position: relative;
+            z-index: 1;
+        }
+
+        
+        footer {
+            padding: 80px 60px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            background: var(--near-black);
+            position: relative;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 60px;
+            margin-bottom: 80px;
+        }
+
+        .footer-col h4 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.75rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 25px;
+            color: var(--white);
+        }
+
+        .footer-col p,
+        .footer-col a {
+            font-size: 0.85rem;
+            line-height: 2;
+            color: var(--mid-gray);
+            font-weight: 300;
+            text-decoration: none;
+            display: block;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .footer-col a::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--white);
+            transition: width 0.3s ease;
+        }
+
+        .footer-col a:hover {
+            color: var(--white);
+            padding-left: 10px;
+        }
+
+        .footer-col a:hover::before {
+            width: 100%;
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 40px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .footer-bottom span {
+            font-size: 0.7rem;
+            color: var(--mid-gray);
+            letter-spacing: 2px;
+        }
+
+        
+        .reveal {
+            opacity: 0;
+            transform: translateY(60px);
+            transition: all 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-left {
+            opacity: 0;
+            transform: translateX(-60px);
+            transition: all 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .reveal-left.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .reveal-right {
+            opacity: 0;
+            transform: translateX(60px);
+            transition: all 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .reveal-right.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .reveal-scale {
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .reveal-scale.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .reveal-rotate {
+            opacity: 0;
+            transform: rotate(-10deg) translateY(60px);
+            transition: all 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .reveal-rotate.active {
+            opacity: 1;
+            transform: rotate(0) translateY(0);
+        }
+
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.3s; }
+        .reveal-delay-4 { transition-delay: 0.4s; }
+        .reveal-delay-5 { transition-delay: 0.5s; }
+        .reveal-delay-6 { transition-delay: 0.6s; }
+
+        
+        .page-line {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--white), transparent);
+            z-index: 9999;
+            transition: width 0.3s ease;
+        }
+
+        
+        .scroll-progress {
+            position: fixed;
+            right: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 2px;
+            height: 100px;
+            background: rgba(255,255,255,0.1);
+            z-index: 1000;
+        }
+
+        .scroll-progress-bar {
+            width: 100%;
+            height: 0%;
+            background: var(--white);
+            transition: height 0.1s ease;
+        }
+
+        
+        @media (max-width: 968px) {
+            nav {
+                padding: 20px 30px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            section {
+                padding: 100px 30px;
+            }
+
+            .about-grid {
+                grid-template-columns: 1fr;
+                gap: 60px;
+            }
+
+            .about-visual {
+                display: none;
+            }
+
+            .manifesto-blocks {
+                grid-template-columns: 1fr;
+            }
+
+            .honor-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .large-text-section {
+                padding: 100px 30px;
+            }
+
+            .quotes {
+                padding: 120px 30px;
+            }
+
+            .scroll-progress {
+                display: none;
+            }
+        }
+
+        
+        ::selection {
+            background: var(--white);
+            color: var(--black);
+        }
+
+        ::-moz-selection {
+            background: var(--white);
+            color: var(--black);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="cursor" id="cursor"></div>
+    <div class="cursor-dot" id="cursorDot"></div>
+    <div class="cursor-text" id="cursorText">View</div>
+    <div class="page-line" id="pageLine"></div>
+
+    <div class="scroll-progress">
+        <div class="scroll-progress-bar" id="scrollProgressBar"></div>
+    </div>
+
+    <!-- прилоадер -->
+    <div class="preloader" id="preloader">
+        <div class="preloader-logo">
+            <div class="preloader-text" id="preloaderText">White Alliance</div>
+        </div>
+        <div class="preloader-line"></div>
+        <div class="preloader-counter" id="preloaderCounter">0</div>
+    </div>
+
+    <!-- панель навигации -->
+    <nav>
+        <div class="nav-logo magnetic">W / A</div>
+        <ul class="nav-links">
+            <li><a href="#about" data-text="About">About</a></li>
+            <li><a href="#manifesto" data-text="Manifesto">Manifesto</a></li>
+            <li><a href="#projects" data-text="Projects">Projects</a></li>
+            <li><a href="#honor" data-text="Honor Board">Honor Board</a></li>
+            <li><a href="#join" data-text="Join">Join</a></li>
+        </ul>
+    </nav>
+
+    <!-- херо -->
+    <section class="hero">
+        <div class="hero-bg-grid"></div>
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+        <div class="particles" id="particles"></div>
+        <div class="hero-content">
+            <p class="hero-subtitle">Est. MMXXIV // MK Universe</p>
+            <h1 class="hero-title">
+                <span class="line"><span>White</span></span>
+                <span class="line"><span>Alliance</span></span>
+            </h1>
+            <p class="hero-description">
+                Of Musicians. A collective forged in sound, bound by vision, operating within the MK realm.
+            </p>
+        </div>
+        <div class="scroll-indicator" id="scrollIndicator">
+            <span>Scroll</span>
+            <div class="scroll-line"></div>
+        </div>
+    </section>
+
+    <!-- говно -->
+    <div class="marquee-section">
+        <div class="marquee-track">
+            <span>White Alliance</span>
+            <span>Of Musicians</span>
+            <span>White Alliance</span>
+            <span>Of Musicians</span>
+            <span>White Alliance</span>
+            <span>Of Musicians</span>
+            <span>White Alliance</span>
+            <span>Of Musicians</span>
+        </div>
+    </div>
+
+    <!-- о нас -->
+    <section class="about" id="about">
+        <div class="section-number reveal">001</div>
+        <div class="section-label reveal reveal-delay-1">Information</div>
+        <h2 class="section-title reveal reveal-delay-2">
+            <span class="word"><span>About</span></span> 
+            <span class="word"><span>The</span></span><br>
+            <span class="word"><span>Alliance</span></span>
+        </h2>
+        <div class="about-grid">
+            <div class="about-text">
+                <p class="reveal reveal-delay-3">
+                    White Alliance Of Musicians -- это закрытый альянс, действующий в рамках фандома MK. Мы объединяем музыкантов, продюсеров и визионеров, работающих на стыке звука и нарратива вселенной Mortal Kombat.
+                </p>
+                <p class="reveal reveal-delay-4">
+                    [REDACTED] -- основатель и идеолог проекта. Миссия альянса -- [REDACTED]. Каждый участник проходит через [REDACTED] прежде чем получить доступ к внутреннему кругу.
+                </p>
+                <p class="reveal reveal-delay-5">
+                    Наши принципы: качество выше количества, дисциплина выше хаоса, единство выше индивидуализма. Мы не ищем внимания -- мы создаем пространство, в котором рождается то, что невозможно создать в одиночку.
+                </p>
+                <div class="about-stats">
+                    <div class="stat-item reveal">
+                        <div class="stat-number" data-value="242">[242]</div>
+                        <div class="stat-label">Members</div>
+                    </div>
+                    <div class="stat-item reveal reveal-delay-1">
+                        <div class="stat-number" data-value="04">[04]</div>
+                        <div class="stat-label">Projects</div>
+                    </div>
+                    <div class="stat-item reveal reveal-delay-2">
+                        <div class="stat-number" data-value="18">[18]</div>
+                        <div class="stat-label">Admins</div>
+                    </div>
+                    <div class="stat-item reveal reveal-delay-3">
+                        <div class="stat-number">24/7</div>
+                        <div class="stat-label">Active</div>
+                    </div>
+                </div>
+            </div>
+            <div class="about-visual">
+                <div class="about-visual-box"></div>
+                <div class="about-visual-box"></div>
+                <div class="about-visual-box"></div>
+                <div class="about-visual-box"></div>
+                <div class="about-visual-text">WA</div>
+            </div>
+        </div>
+    </section>
+
+    <div class="diagonal-divider"></div>
+
+    <!-- манфест сука -->
+    <section class="manifesto" id="manifesto">
+        <div class="section-number reveal" style="color: var(--mid-gray);">002</div>
+        <div class="section-label reveal reveal-delay-1">Principles</div>
+        <h2 class="section-title reveal reveal-delay-2" style="color: var(--black);">
+            <span class="word"><span>What</span></span> 
+            <span class="word"><span>We</span></span><br>
+            <span class="word"><span>Stand</span></span> 
+            <span class="word"><span>For</span></span>
+        </h2>
+        <div class="manifesto-content reveal reveal-delay-3">
+            <blockquote class="manifesto-quote">
+                "Мы не команда. Мы -- <span class="highlight">альянс</span>. Мы существуем не для того чтобы быть замеченными, а для того чтобы оставить <span class="highlight">след</span>, который невозможно игнорировать."
+            </blockquote>
+        </div>
+        <div class="manifesto-blocks">
+            <div class="manifesto-block reveal">
+                <div class="manifesto-block-number">01</div>
+                <h3>[REDACTED]</h3>
+                <p>Каждый участник альянса разделяет единую философию подхода к творчеству. Детали внутреннего кодекса остаются за закрытыми дверями.</p>
+            </div>
+            <div class="manifesto-block reveal reveal-delay-2">
+                <div class="manifesto-block-number">02</div>
+                <h3>[REDACTED]</h3>
+                <p>Структура организации построена на принципах, которые обеспечивают максимальную эффективность каждого участника внутри системы.</p>
+            </div>
+            <div class="manifesto-block reveal reveal-delay-4">
+                <div class="manifesto-block-number">03</div>
+                <h3>[REDACTED]</h3>
+                <p>Конечная цель альянса выходит за рамки обычного фандома. Это больше чем музыка. Это больше чем сообщество. Это -- [REDACTED].</p>
+            </div>
+        </div>
+    </section>
+
+    
+    <div class="diagonal-divider-reverse"></div>
+
+    <section class="timeline" id="timeline">
+        <div class="section-number reveal">003</div>
+        <div class="section-label reveal reveal-delay-1">History</div>
+        <h2 class="section-title reveal reveal-delay-2">
+            <span class="word"><span>Our</span></span><br>
+            <span class="word"><span>Journey</span></span>
+        </h2>
+        <div class="timeline-container" id="timelineContainer">
+            <div class="timeline-line"></div>
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-date">[REDACTED] 2024</div>
+                <h3 class="timeline-title">Основание</h3>
+                <p class="timeline-text">White Alliance Of Musicians был основан [REDACTED]. Первоначальная идея заключалась в создании пространства для музыкантов, работающих в рамках вселенной MK.</p>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-date">[REDACTED] 2024</div>
+                <h3 class="timeline-title">Первые участники</h3>
+                <p class="timeline-text">К альянсу присоединились первые [REDACTED] участников. Была сформирована структура и определены ключевые направления деятельности.</p>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-date">[REDACTED] 2024</div>
+                <h3 class="timeline-title">[REDACTED]</h3>
+                <p class="timeline-text">Запуск первого крупного проекта. Детали остаются конфиденциальными до официального анонса.</p>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-date">Настоящее время</div>
+                <h3 class="timeline-title">Развитие</h3>
+                <p class="timeline-text">Альянс продолжает расти и развиваться. Новые проекты находятся в разработке. Присоединиться может каждый, кто разделяет наши ценности.</p>
+            </div>
+        </div>
+    </section>
+
+    <div class="large-text-section">
+        <div class="large-text reveal-scale" id="largeText">
+            <span>W</span><span>.</span><span>A</span><span>.</span><span>O</span><span>.</span><span>M</span><span>.</span>
+        </div>
+    </div>
+
+    <section class="projects" id="projects">
+        <div class="section-number reveal">004</div>
+        <div class="section-label reveal reveal-delay-1">Works</div>
+        <h2 class="section-title reveal reveal-delay-2">
+            <span class="word"><span>Active</span></span><br>
+            <span class="word"><span>Projects</span></span>
+        </h2>
+        <div class="projects-grid">
+            <div class="project-card reveal" data-cursor="Explore">
+                <span class="project-number">PRJ-001</span>
+                <span class="project-status">[REDACTED]</span>
+                <div class="project-content">
+                    <h3 class="project-title">[REDACTED]</h3>
+                    <p class="project-desc">Основной проект альянса. Масштабная работа над [REDACTED], объединяющая всех участников Inner Circle.</p>
+                </div>
+                <div class="project-arrow"></div>
+            </div>
+            <div class="project-card reveal reveal-delay-1" data-cursor="Explore">
+                <span class="project-number">PRJ-002</span>
+                <span class="project-status">In Progress</span>
+                <div class="project-content">
+                    <h3 class="project-title">[REDACTED]</h3>
+                    <p class="project-desc">Коллаборативный проект с участием [REDACTED]. Ожидаемая дата завершения: [REDACTED].</p>
+                </div>
+                <div class="project-arrow"></div>
+            </div>
+            <div class="project-card reveal reveal-delay-2" data-cursor="Explore">
+                <span class="project-number">PRJ-003</span>
+                <span class="project-status">Planning</span>
+                <div class="project-content">
+                    <h3 class="project-title">[REDACTED]</h3>
+                    <p class="project-desc">Экспериментальное направление работы альянса. Подробности будут раскрыты позже.</p>
+                </div>
+                <div class="project-arrow"></div>
+            </div>
+            <div class="project-card reveal reveal-delay-3" data-cursor="Explore">
+                <span class="project-number">PRJ-004</span>
+                <span class="project-status">Concept</span>
+                <div class="project-content">
+                    <h3 class="project-title">[REDACTED]</h3>
+                    <p class="project-desc">На стадии концепции. Ищем участников с опытом в [REDACTED].</p>
+                </div>
+                <div class="project-arrow"></div>
+            </div>
+            <div class="project-card reveal reveal-delay-4" data-cursor="Explore">
+                <span class="project-number">PRJ-005</span>
+                <span class="project-status">Completed</span>
+                <div class="project-content">
+                    <h3 class="project-title">[REDACTED]</h3>
+                    <p class="project-desc">Завершенный проект. Результаты доступны для участников альянса.</p>
+                </div>
+                <div class="project-arrow"></div>
+            </div>
+            <div class="project-card reveal reveal-delay-5" data-cursor="Explore">
+                <span class="project-number">PRJ-006</span>
+                <span class="project-status">Active</span>
+                <div class="project-content">
+                    <h3 class="project-title">[REDACTED]</h3>
+                    <p class="project-desc">Текущий активный проект альянса. Информация засекречена.</p>
+                </div>
+                <div class="project-arrow"></div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="quotes">
+        <div class="quotes-container">
+            <p class="quote-text" id="quoteText">
+                <span class="word"><span>Музыка</span></span> 
+                <span class="word"><span>--</span></span> 
+                <span class="word"><span>это</span></span> 
+                <span class="word"><span>не</span></span> 
+                <span class="word"><span>то,</span></span> 
+                <span class="word"><span>что</span></span> 
+                <span class="word"><span>мы</span></span> 
+                <span class="word"><span>делаем.</span></span> 
+                <span class="word"><span>Это</span></span> 
+                <span class="word"><span>то,</span></span> 
+                <span class="word"><span>чем</span></span> 
+                <span class="word"><span>мы</span></span> 
+                <span class="word"><span>являемся.</span></span>
+            </p>
+            <span class="quote-author reveal">[REDACTED], Founder</span>
+        </div>
+    </section>
+
+    <section class="honor" id="honor">
+        <div class="section-number reveal">005</div>
+        <div class="section-label reveal reveal-delay-1">Recognition</div>
+        <h2 class="section-title reveal reveal-delay-2">
+            <span class="word"><span>Honor</span></span><br>
+            <span class="word"><span>Board</span></span>
+        </h2>
+        <div class="honor-grid">
+            <div class="honor-card reveal">
+                <div class="honor-rank">01</div>
+                <div class="honor-avatar">R</div>
+                <div class="honor-name">[REDACTED]</div>
+                <div class="honor-role">Founder // Leader</div>
+                <p class="honor-description">Основатель White Alliance. Архитектор концепции и визионер проекта. Все началось с [REDACTED].</p>
+                <span class="honor-badge"><span>Inner Circle</span></span>
+            </div>
+            <div class="honor-card reveal reveal-delay-1">
+                <div class="honor-rank">02</div>
+                <div class="honor-avatar">R</div>
+                <div class="honor-name">[REDACTED]</div>
+                <div class="honor-role">Co-Founder // Producer</div>
+                <p class="honor-description">Правая рука альянса. Отвечает за [REDACTED]. Вклад в развитие проекта: неоценим.</p>
+                <span class="honor-badge"><span>Inner Circle</span></span>
+            </div>
+            <div class="honor-card reveal reveal-delay-2">
+                <div class="honor-rank">03</div>
+                <div class="honor-avatar">R</div>
+                <div class="honor-name">[REDACTED]</div>
+                <div class="honor-role">Head of [REDACTED]</div>
+                <p class="honor-description">Ответственный за направление [REDACTED]. Присоединился к альянсу в [REDACTED] и с тех пор [REDACTED].</p>
+                <span class="honor-badge"><span>Core Member</span></span>
+            </div>
+            <div class="honor-card reveal reveal-delay-3">
+                <div class="honor-rank">04</div>
+                <div class="honor-avatar">R</div>
+                <div class="honor-name">[REDACTED]</div>
+                <div class="honor-role">Composer</div>
+                <p class="honor-description">Создатель ключевых композиций альянса. Его работа над [REDACTED] определила звучание проекта.</p>
+                <span class="honor-badge"><span>Core Member</span></span>
+            </div>
+            <div class="honor-card reveal reveal-delay-4">
+                <div class="honor-rank">05</div>
+                <div class="honor-avatar">R</div>
+                <div class="honor-name">[REDACTED]</div>
+                <div class="honor-role">Visual Director</div>
+                <p class="honor-description">Все визуальные решения альянса проходят через [REDACTED]. Создал айдентику и визуальный язык W.A.</p>
+                <span class="honor-badge"><span>Core Member</span></span>
+            </div>
+            <div class="honor-card reveal reveal-delay-5">
+                <div class="honor-rank">06</div>
+                <div class="honor-avatar">R</div>
+                <div class="honor-name">[REDACTED]</div>
+                <div class="honor-role">Strategist</div>
+                <p class="honor-description">Разработал стратегию [REDACTED]. Без его участия альянс не достиг бы текущего уровня.</p>
+                <span class="honor-badge"><span>Core Member</span></span>
+            </div>
+        </div>
+    </section>
+
+    <div class="diagonal-divider"></div>
+    <section class="vision">
+        <div class="section-number reveal">006</div>
+        <div class="section-label reveal reveal-delay-1">Future</div>
+        <h2 class="section-title reveal reveal-delay-2" style="color: var(--black);">
+            <span class="word"><span>Our</span></span><br>
+            <span class="word"><span>Vision</span></span>
+        </h2>
+        <div class="vision-content">
+            <div class="vision-text">
+                <h3 class="reveal reveal-delay-3">Мы строим не просто сообщество. Мы создаем наследие.</h3>
+                <p class="reveal reveal-delay-4">
+                    Каждый проект, каждая композиция, каждое решение -- это кирпич в фундаменте того, что останется после нас.
+                </p>
+                <p class="reveal reveal-delay-5">
+                    White Alliance -- это больше, чем сумма его участников. Это идея, которая будет жить и развиваться, пока существует вселенная, которую мы любим.
+                </p>
+                <p class="reveal reveal-delay-6">
+                    [REDACTED] -- наша конечная цель. И мы движемся к ней каждый день.
+                </p>
+            </div>
+        </div>
+    </section>
+    <div class="diagonal-divider-reverse"></div>
+
+    
+    <div class="marquee-section">
+        <div class="marquee-track" style="animation-direction: reverse;">
+            <span>MK Universe</span>
+            <span>White Alliance</span>
+            <span>MK Universe</span>
+            <span>White Alliance</span>
+            <span>MK Universe</span>
+            <span>White Alliance</span>
+            <span>MK Universe</span>
+            <span>White Alliance</span>
+        </div>
+    </div>
+    
+    
+    <section class="join" id="join">
+        <div class="section-number reveal">007</div>
+        <div class="section-label reveal reveal-delay-1">Application</div>
+        <div class="join-content">
+            <h2 class="join-title reveal reveal-delay-2">Join The<br>Alliance</h2>
+            <p class="join-text reveal reveal-delay-3">
+                Мы всегда ищем талантливых музыкантов, продюсеров и визионеров, готовых стать частью чего-то большего. Если ты разделяешь наши ценности и готов работать на результат -- мы ждем тебя.
+            </p>
+            <a href="#" class="join-button magnetic reveal reveal-delay-4">
+                <span>[REDACTED]</span>
+            </a>
+        </div>
+    </section>
+
+    
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h4>White Alliance</h4>
+                <p>White Alliance Of Musicians.<br>Альянс в рамках фандома MK.<br>Все права защищены.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Navigation</h4>
+                <a href="#about">About</a>
+                <a href="#manifesto">Manifesto</a>
+                <a href="#projects">Projects</a>
+                <a href="#honor">Honor Board</a>
+                <a href="#join">Join</a>
+            </div>
+            <div class="footer-col">
+                <h4>Contact</h4>
+                <a href="#">[REDACTED]</a>
+                <a href="#">[REDACTED]</a>
+                <a href="#">[REDACTED]</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>White Alliance Of Musicians // MMXXIV</span>
+            <span>MK Fandom</span>
+        </div>
+    </footer>
+
+    <script>
+        // загрузчик
+        let counter = 0;
+        const preloaderCounter = document.getElementById('preloaderCounter');
+        const preloaderText = document.getElementById('preloaderText');
+        
+        // загрузчик анимация текста
+        const text = preloaderText.textContent;
+        preloaderText.innerHTML = '';
+        text.split('').forEach((char, i) => {
+            const span = document.createElement('span');
+            span.textContent = char === ' ' ? '\u00A0' : char;
+            span.style.animationDelay = `${i * 0.05}s`;
+            preloaderText.appendChild(span);
+        });
+
+        const counterInterval = setInterval(() => {
+            counter += Math.floor(Math.random() * 10) + 1;
+            if (counter >= 100) {
+                counter = 100;
+                clearInterval(counterInterval);
+            }
+            preloaderCounter.textContent = counter;
+        }, 50);
+
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('preloader').classList.add('hide');
+                setTimeout(() => {
+                    document.getElementById('preloader').style.display = 'none';
+                }, 1200);
+            }, 2500);
+        });
+
+        // курсорчик
+        const cursor = document.getElementById('cursor');
+        const cursorDot = document.getElementById('cursorDot');
+        const cursorText = document.getElementById('cursorText');
+        let mouseX = 0, mouseY = 0;
+        let cursorX = 0, cursorY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            cursorDot.style.left = mouseX - 2 + 'px';
+            cursorDot.style.top = mouseY - 2 + 'px';
+            cursorText.style.left = mouseX + 25 + 'px';
+            cursorText.style.top = mouseY - 5 + 'px';
+        });
+
+        function animateCursor() {
+            cursorX += (mouseX - cursorX) * 0.1;
+            cursorY += (mouseY - cursorY) * 0.1;
+            cursor.style.left = cursorX - 10 + 'px';
+            cursor.style.top = cursorY - 10 + 'px';
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        // скролл прогресс
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = (scrollTop / docHeight) * 100;
+            document.getElementById('pageLine').style.width = progress + '%';
+            document.getElementById('scrollProgressBar').style.height = progress + '%';
+        });
+
+        // говно
+        const reveals = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, .reveal-rotate');
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+        reveals.forEach(el => revealObserver.observe(el));
+
+        // анимация секций
+        const sectionTitles = document.querySelectorAll('.section-title');
+        const titleObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.3 });
+
+        sectionTitles.forEach(el => titleObserver.observe(el));
+        
+        // анрмация секций цифрки
+        const sectionNumbers = document.querySelectorAll('.section-number');
+        const numberObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.5 });
+
+        sectionNumbers.forEach(el => numberObserver.observe(el));
+
+        // маниыест
+        const manifestoQuote = document.querySelector('.manifesto-quote');
+        const quoteObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.5 });
+
+        if (manifestoQuote) quoteObserver.observe(manifestoQuote);
+
+        
+        const quoteText = document.getElementById('quoteText');
+        const quoteTextObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.3 });
+
+        if (quoteText) quoteTextObserver.observe(quoteText);
+
+        
+        const timelineContainer = document.getElementById('timelineContainer');
+        const timelineItems = document.querySelectorAll('.timeline-item');
+        const timelineObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    timelineItems.forEach((item, index) => {
+                        setTimeout(() => {
+                            item.classList.add('active');
+                        }, index * 200);
+                    });
+                }
+            });
+        }, { threshold: 0.2 });
+
+        if (timelineContainer) {
+            timelineObserver.observe(timelineContainer);
+        }
+
+        // гнеретатр пратиктлов
+        const particlesContainer = document.getElementById('particles');
+        for (let i = 0; i < 40; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDuration = (Math.random() * 15 + 10) + 's';
+            particle.style.animationDelay = (Math.random() * 10) + 's';
+            particle.style.width = (Math.random() * 3 + 1) + 'px';
+            particle.style.height = particle.style.width;
+            particlesContainer.appendChild(particle);
+        }
+
+        // какашка
+        const interactiveElements = document.querySelectorAll('a, .honor-card, .manifesto-block, .project-card, .join-button, .timeline-item, .magnetic');
+        
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursor.classList.add('hover');
+                cursorDot.classList.add('hidden');
+                
+                // курсорчик cover
+                if (el.dataset.cursor) {
+                    cursorText.textContent = el.dataset.cursor;
+                    cursorText.classList.add('show');
+                }
+            });
+            el.addEventListener('mouseleave', () => {
+                cursor.classList.remove('hover');
+                cursorDot.classList.remove('hidden');
+                cursorText.classList.remove('show');
+            });
+        });
+
+        document.querySelectorAll('.honor-card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = ((e.clientX - rect.left) / rect.width) * 100;
+                const y = ((e.clientY - rect.top) / rect.height) * 100;
+                card.style.setProperty('--mouse-x', x + '%');
+                card.style.setProperty('--mouse-y', y + '%');
+            });
+        });
+
+        // дизайн 3d
+        window.addEventListener('scroll', () => {
+            const scrolled = window.scrollY;
+            const hero = document.querySelector('.hero-content');
+            if (hero && scrolled < window.innerHeight) {
+                hero.style.transform = `translateY(${scrolled * 0.4}px)`;
+                hero.style.opacity = 1 - scrolled / 600;
+            }
+
+            // 3d орбы
+            document.querySelectorAll('.orb').forEach((orb, i) => {
+                orb.style.transform = `translate(${Math.sin(scrolled * 0.001 + i) * 30}px, ${Math.cos(scrolled * 0.001 + i) * 30}px)`;
+            });
+        });
+
+        document.querySelectorAll('.magnetic').forEach(btn => {
+            btn.addEventListener('mousemove', (e) => {
+                const rect = btn.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                btn.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
+            });
+            btn.addEventListener('mouseleave', () => {
+                btn.style.transform = 'translate(0, 0)';
+            });
+        });
+
+        
+        const statItems = document.querySelectorAll('.stat-item');
+        const statObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    const number = entry.target.querySelector('.stat-number');
+                    if (number) {
+                        const text = number.textContent;
+                        if (text.includes('[')) {
+                            let count = 0;
+                            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%';
+                            const interval = setInterval(() => {
+                                if (count > 15) {
+                                    clearInterval(interval);
+                                    number.textContent = text;
+                                    return;
+                                }
+                                number.textContent = '[' + chars[Math.floor(Math.random() * chars.length)] + chars[Math.floor(Math.random() * chars.length)] + ']';
+                                count++;
+                            }, 50);
+                        }
+                    }
+                    statObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        statItems.forEach(el => statObserver.observe(el));
+
+        
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // еще 3д
+        document.querySelectorAll('.project-card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const rotateX = (y - centerY) / 20;
+                const rotateY = (centerX - x) / 20;
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)';
+            });
+        });
+
+        
+        const largeTextLetters = document.querySelectorAll('#largeText span');
+        largeTextLetters.forEach((letter, i) => {
+            letter.style.transitionDelay = `${i * 0.05}s`;
+        });
+
+        
+        document.getElementById('scrollIndicator').addEventListener('click', () => {
+            document.getElementById('about').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        
+        const aboutParagraphs = document.querySelectorAll('.about-text p');
+        const aboutObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.3 });
+
+        aboutParagraphs.forEach(el => aboutObserver.observe(el));
+
+        
+        document.addEventListener('click', (e) => {
+            const ripple = document.createElement('div');
+            ripple.style.cssText = `
+                position: fixed;
+                left: ${e.clientX}px;
+                top: ${e.clientY}px;
+                width: 0;
+                height: 0;
+                border-radius: 50%;
+                background: rgba(255,255,255,0.1);
+                transform: translate(-50%, -50%);
+                pointer-events: none;
+                z-index: 9999;
+                animation: rippleEffect 0.6s ease-out forwards;
+            `;
+            document.body.appendChild(ripple);
+            setTimeout(() => ripple.remove(), 600);
+        });
+
+        
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes rippleEffect {
+                to {
+                    width: 200px;
+                    height: 200px;
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+
+        class TextScramble {
+            constructor(el) {
+                this.el = el;
+                this.chars = '!<>-_\\/[]{}—=+*^?#________';
+                this.originalText = el.textContent;
+            }
+            
+            scramble() {
+                let iteration = 0;
+                const interval = setInterval(() => {
+                    this.el.textContent = this.originalText
+                        .split('')
+                        .map((char, index) => {
+                            if (index < iteration) return this.originalText[index];
+                            return this.chars[Math.floor(Math.random() * this.chars.length)];
+                        })
+                        .join('');
+                    
+                    if (iteration >= this.originalText.length) {
+                        clearInterval(interval);
+                    }
+                    iteration += 1/2;
+                }, 30);
+            }
+        }
+
+        document.querySelectorAll('.honor-name').forEach(name => {
+            const scrambler = new TextScramble(name);
+            name.addEventListener('mouseenter', () => scrambler.scramble());
+        });
+    </script>
+
+</body>
+</html>
